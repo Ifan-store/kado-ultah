@@ -1,0 +1,830 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Selamat Ulang Tahun</title>
+  <style>
+    :root{
+      --bg1:#0b1020;
+      --bg2:#1b1340;
+      --card:#ffffff10;
+      --card2:#ffffff18;
+      --text:#f6f3ff;
+      --muted:#d9d2ffcc;
+      --accent:#ff5ea8;
+      --accent2:#7c5cff;
+      --shadow: 0 20px 60px rgba(0,0,0,.35);
+      --radius: 22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      background: radial-gradient(1200px 800px at 20% 10%, #ff5ea825, transparent 60%),
+                  radial-gradient(900px 700px at 85% 20%, #7c5cff25, transparent 55%),
+                  linear-gradient(160deg, var(--bg1), var(--bg2));
+      overflow-x:hidden;
+    }
+
+    /* floating hearts */
+    .heart{
+      position:fixed;
+      left:var(--x);
+      bottom:-40px;
+      width:18px;height:18px;
+      transform:rotate(45deg);
+      background:linear-gradient(135deg, var(--accent), #ffb6d8);
+      opacity:.75;
+      animation:floatUp var(--d) linear infinite;
+      filter: blur(.2px);
+      z-index:0;
+      pointer-events:none;
+    }
+    .heart:before,.heart:after{
+      content:"";
+      position:absolute;
+      width:18px;height:18px;
+      background:inherit;
+      border-radius:50%;
+    }
+    .heart:before{left:-9px;top:0}
+    .heart:after{left:0;top:-9px}
+    @keyframes floatUp{
+      0%{transform:translateY(0) rotate(45deg) scale(.9); opacity:0}
+      10%{opacity:.75}
+      100%{transform:translateY(-110vh) rotate(45deg) scale(1.4); opacity:0}
+    }
+
+    .wrap{
+      width:min(1040px, 92vw);
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:22px;
+      z-index:1;
+      padding:28px 0;
+    }
+    @media (max-width: 900px){
+      .wrap{grid-template-columns:1fr}
+    }
+    .card{
+      background:linear-gradient(180deg, var(--card), var(--card2));
+      border:1px solid #ffffff1f;
+      border-radius:var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      padding:22px;
+      position:relative;
+      overflow:hidden;
+    }
+    .badge{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid #ffffff22;
+      background:#ffffff12;
+      color:var(--muted);
+      font-size:13px;
+      letter-spacing:.2px;
+    }
+    h1{
+      margin:14px 0 10px;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height:1.05;
+    }
+    h2{
+      margin:0 0 8px;
+      font-size:22px;
+    }
+    .sub{
+      color:var(--muted);
+      font-size:15.5px;
+      line-height:1.6;
+      margin:0 0 18px;
+    }
+    .row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:14px;
+    }
+    button, .btn{
+      cursor:pointer;
+      border:none;
+      border-radius:14px;
+      padding:12px 14px;
+      font-weight:650;
+      color:#0b1020;
+      background: linear-gradient(135deg, #ffd1e6, #ff5ea8);
+      box-shadow: 0 10px 30px rgba(255,94,168,.25);
+      transition: transform .15s ease, filter .15s ease;
+      user-select:none;
+    }
+    button:hover{transform:translateY(-1px); filter:saturate(1.05)}
+    .btn.secondary{
+      background: linear-gradient(135deg, #e6dbff, #7c5cff);
+      color:#0b1020;
+      box-shadow: 0 10px 30px rgba(124,92,255,.25);
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .mini{
+      font-size:13px;
+      color:var(--muted);
+      margin-top:10px;
+      line-height:1.5;
+    }
+
+    /* right side */
+    .photo{
+      border-radius:20px;
+      overflow:hidden;
+      border:1px solid #ffffff20;
+      height: 240px;
+      background:
+        radial-gradient(500px 200px at 20% 30%, #ff5ea833, transparent 60%),
+        radial-gradient(500px 250px at 80% 20%, #7c5cff33, transparent 60%),
+        linear-gradient(135deg, #ffffff10, #ffffff06);
+      display:grid;
+      place-items:center;
+      position:relative;
+    }
+    .photo .hint{
+      text-align:center;
+      color:var(--muted);
+      font-size:14px;
+      padding:0 16px;
+    }
+    .stats{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:14px;
+    }
+    .pill{
+      border:1px solid #ffffff1f;
+      background:#ffffff10;
+      border-radius:18px;
+      padding:14px;
+    }
+    .pill .k{
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:6px;
+    }
+    .pill .v{
+      font-size:18px;
+      font-weight:750;
+    }
+    .footer{
+      margin-top:14px;
+      font-size:12.5px;
+      color:#d9d2ffb3;
+    }
+
+    /* Modal letter */
+    .overlay{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.55);
+      display:none;
+      place-items:center;
+      padding:18px;
+      z-index:50;
+    }
+    .overlay.show{display:grid}
+    .modal{
+      width:min(760px, 94vw);
+      background: linear-gradient(180deg, #ffffff12, #ffffff0a);
+      border:1px solid #ffffff1f;
+      border-radius:24px;
+      box-shadow: var(--shadow);
+      padding:20px;
+      backdrop-filter: blur(12px);
+      position:relative;
+      overflow:hidden;
+    }
+    .modal h2{
+      margin:6px 0 8px;
+      font-size: 26px;
+    }
+    .letter{
+      background:#0b102055;
+      border:1px solid #ffffff14;
+      border-radius:18px;
+      padding:16px;
+      line-height:1.75;
+      color:#f6f3ffeb;
+      font-size:15.5px;
+      white-space:pre-wrap;
+    }
+    .close{
+      position:absolute;
+      top:12px; right:12px;
+      width:42px; height:42px;
+      border-radius:14px;
+      background:#ffffff10;
+      color:var(--text);
+      border:1px solid #ffffff1f;
+      box-shadow:none;
+      font-weight:800;
+      padding:0;
+    }
+    .close:hover{transform:none; filter:none; background:#ffffff18}
+    .sig{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    /* Full width sections */
+    .full{grid-column: 1 / -1}
+
+    /* Slider */
+    .slider{
+      position:relative;
+      border-radius:20px;
+      overflow:hidden;
+      border:1px solid #ffffff20;
+      height: 360px;
+      background:#00000033;
+    }
+    @media (max-width: 900px){
+      .slider{height: 260px;}
+    }
+    .slides{
+      height:100%;
+      display:flex;
+      transition: transform .6s ease;
+    }
+    .slide{
+      min-width:100%;
+      height:100%;
+      background: center/cover no-repeat;
+      position:relative;
+    }
+    .slide:after{
+      content:"";
+      position:absolute; inset:0;
+      background: linear-gradient(0deg, rgba(0,0,0,.45), rgba(0,0,0,.05));
+    }
+    .sliderCaption{
+      position:absolute;
+      left:14px; right:14px; bottom:12px;
+      display:flex; align-items:flex-end; justify-content:space-between;
+      gap:10px;
+      z-index:2;
+    }
+    .sliderCaption .cap{
+      font-size:14px;
+      color:#ffffffd9;
+      line-height:1.35;
+      background:#00000035;
+      border:1px solid #ffffff1a;
+      padding:10px 12px;
+      border-radius:16px;
+      max-width:70%;
+      backdrop-filter: blur(8px);
+    }
+    .dots{display:flex; gap:7px; align-items:center; justify-content:flex-end;}
+    .dot{
+      width:9px; height:9px;
+      border-radius:999px;
+      border:1px solid #ffffff55;
+      background:#ffffff22;
+      cursor:pointer;
+      transition: transform .15s ease, background .15s ease;
+    }
+    .dot.active{background:#ffffffcc; transform: scale(1.15);}
+
+    /* Gallery */
+    .gallery{
+      display:grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px,1fr));
+      gap:12px;
+      margin-top:12px;
+    }
+    .gallery figure{
+      margin:0;
+      border-radius:18px;
+      overflow:hidden;
+      border:1px solid #ffffff20;
+      background:#ffffff0f;
+      cursor:pointer;
+      transition: transform .25s ease;
+    }
+    .gallery figure:hover{transform: scale(1.02)}
+    .gallery img{
+      width:100%;
+      height:170px;
+      object-fit:cover;
+      display:block;
+    }
+    .gallery figcaption{
+      padding:10px 12px;
+      font-size:13px;
+      color:var(--muted);
+      line-height:1.35;
+    }
+
+    /* Lightbox */
+    .lightbox{
+      position:fixed; inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background: rgba(0,0,0,.82);
+      z-index:60;
+      padding:18px;
+    }
+    .lightbox.show{display:flex}
+    .lightbox .box{
+      width:min(980px, 96vw);
+      background:#0b1020cc;
+      border:1px solid #ffffff1f;
+      border-radius:24px;
+      overflow:hidden;
+      box-shadow: var(--shadow);
+    }
+    .lightbox img{
+      width:100%;
+      max-height: 78vh;
+      object-fit:contain;
+      display:block;
+      background:#000;
+    }
+    .lightbox .meta{
+      padding:12px 14px;
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+      font-size:13px;
+    }
+    .lightbox .meta .x{
+      border-radius:12px;
+      background:#ffffff10;
+      border:1px solid #ffffff1f;
+      color:var(--text);
+      padding:10px 12px;
+      cursor:pointer;
+      font-weight:800;
+    }
+
+    /* Timeline */
+    .timeline{
+      margin-top:10px;
+      border-left:2px dashed #ffffff2a;
+      padding-left:16px;
+      display:grid;
+      gap:12px;
+    }
+    .tItem{
+      position:relative;
+      padding:12px 12px 12px 14px;
+      border-radius:18px;
+      background:#ffffff0f;
+      border:1px solid #ffffff18;
+    }
+    .tItem:before{
+      content:"";
+      position:absolute;
+      left:-27px;
+      top:18px;
+      width:12px;height:12px;
+      border-radius:999px;
+      background: linear-gradient(135deg, #ffd1e6, #ff5ea8);
+      border:2px solid #ffffff55;
+      box-shadow:0 0 0 6px #ffffff08;
+    }
+    .tDate{font-size:12px; color:var(--muted); margin-bottom:4px}
+    .tTitle{font-weight:800; margin-bottom:4px}
+    .tText{color:var(--muted); font-size:14px; line-height:1.55}
+
+    /* Password gate */
+    .gateWrap{
+      position:fixed; inset:0;
+      display:none;
+      place-items:center;
+      background: radial-gradient(1200px 800px at 20% 10%, #ff5ea825, transparent 60%),
+                  radial-gradient(900px 700px at 85% 20%, #7c5cff25, transparent 55%),
+                  linear-gradient(160deg, var(--bg1), var(--bg2));
+      z-index:100;
+      padding:18px;
+    }
+    .gateWrap.show{display:grid}
+    .gate{
+      width:min(520px, 94vw);
+      background: linear-gradient(180deg, #ffffff12, #ffffff0a);
+      border:1px solid #ffffff1f;
+      border-radius:24px;
+      box-shadow: var(--shadow);
+      padding:18px;
+      backdrop-filter: blur(12px);
+    }
+    .inp{
+      width:100%;
+      border-radius:14px;
+      padding:12px 12px;
+      border:1px solid #ffffff22;
+      background:#ffffff10;
+      color:var(--text);
+      outline:none;
+      font-size:14px;
+    }
+    .err{color:#ffd1e6; font-size:13px; margin-top:10px; display:none}
+    .small{color:var(--muted); font-size:13px; margin-top:8px; line-height:1.5}
+  </style>
+</head>
+
+<body>
+  <!-- Password Gate -->
+  <div class="gateWrap" id="gateWrap" aria-hidden="true">
+    <div class="gate">
+      <span class="badge">🔒 Halaman Spesial</span>
+      <h2 style="margin:10px 0 6px;">Masukkan password</h2>
+      <div class="small" id="gateHint">Hint: (diisi di bagian KUSTOMISASI)</div>
+      <div style="margin-top:10px; display:flex; gap:10px;">
+        <input class="inp" id="gateInput" type="password" placeholder="Password..." />
+        <button id="gateBtn">Buka</button>
+      </div>
+      <div class="err" id="gateErr">Password salah. Coba lagi ya.</div>
+      <div class="small">Jika tidak mau pakai password, set <b>ENABLE_PASSWORD = false</b>.</div>
+    </div>
+  </div>
+
+  <main class="wrap" id="content" style="display:none;">
+    <section class="card">
+      <span class="badge" id="dateBadge">🎉 Hari ini spesial</span>
+      <h1>Selamat Ulang Tahun, <span id="nama">Sayang</span></h1>
+      <p class="sub" id="teaser"></p>
+
+      <div class="row">
+        <button id="openLetter">Buka surat</button>
+        <button class="btn secondary" id="playSong">Putar musik</button>
+        <a class="btn secondary" id="waBtn" href="#" target="_blank" rel="noopener">Kirim via WhatsApp</a>
+      </div>
+      <div class="mini">Di buka suratnya ya sayang dan di baca, jangan lupa music nya di putar biar lebih enjoy.</div>
+    </section>
+
+    <aside class="card">
+      <div class="photo" id="heroPhoto">
+        <div class="hint" id="heroHint">Ganti ini jadi foto kalian.</div>
+      </div>
+
+      <div class="stats">
+        <div class="pill">
+          <div class="k">YANG IPAN SUKA DARI RETA</div>
+          <div class="v" id="fav"></div>
+        </div>
+        <div class="pill">
+          <div class="k">KEDEPANNYA WAT KAMU</div>
+          <div class="v" id="wish"></div>
+        </div>
+      </div>
+
+      <div class="footer" id="footerText"></div>
+    </aside>
+
+    <!-- Slider -->
+    <section class="card full">
+      <h2>📸</h2>
+      <div class="slider" id="slider">
+        <div class="slides" id="slides"></div>
+        <div class="sliderCaption">
+          <div class="cap" id="slideCaption">—</div>
+          <div class="dots" id="dots"></div>
+        </div>
+      </div>
+      <div class="mini">JANGAN KAGET KALAU SLIDE NYA BISA GESER SENDIRI HEHE.</div>
+    </section>
+
+    <!-- Gallery -->
+    <section class="card full">
+      <h2>Foto-foto kita</h2>
+      <div class="gallery" id="gallery"></div>
+      <div class="mini">DI KLIK DONG BIAR JELAS LIHAT POTO POTO KITA NYA WKWK.</div>
+    </section>
+
+    <!-- Timeline -->
+    <section class="card full">
+      <h2>Catatan kecil</h2>
+      <div class="timeline" id="timeline"></div>
+      <div class="mini">FROM IFAN ARJA GANTENG TO MARETA MULIA PUTRI 🤍 .</div>
+    </section>
+  </main>
+
+  <!-- Letter modal -->
+  <div class="overlay" id="overlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Surat Ucapan">
+      <button class="close" id="closeLetter" aria-label="Tutup">✕</button>
+      <h2>Untuk <span id="toName">Sayang</span></h2>
+      <div class="letter" id="letterText"></div>
+      <div class="sig" id="signature"></div>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <div class="box">
+      <img id="lightboxImg" alt="Foto kenangan" />
+      <div class="meta">
+        <div id="lightboxCap">—</div>
+        <button class="x" id="lightboxClose">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <audio id="audio" preload="auto"></audio>
+
+  <script>
+    /* ==========================
+       KUSTOMISASI (EDIT DI SINI)
+       ========================== */
+
+    const ENABLE_PASSWORD = false;          // true = pakai password, false = langsung terbuka
+    const PAGE_PASSWORD   = "sayang123";    // password
+    const PASSWORD_HINT   = "contoh: tanggal jadian 😉"; // hint
+
+    const DATA = {
+      nama: "Mareta Mulia Putri",
+      tanggal: "1 Maret 2025",
+      teaser: "Semoga hari ini jadi awal dari banyak hal baik yang datang ke hidupmu, dan tahun ini membawa kesempatan baru untukmu.",
+      fav: "Kedewasaanmu terlihat dari cara kamu menghadapi masalah dan tetap menjaga sikap. Ketenanganmu memberi rasa aman, dan itu salah satu hal yang paling aku hargai darimu.",
+      wish: "Semoga kamu selalu diberi kekuatan untuk melangkah, ketenangan dalam mengambil keputusan, dan kemudahan dalam mencapai apa yang sedang kamu perjuangkan.",
+      footerText: "Tidak banyak kata, hanya doa dan dukungan yang nyata.",
+      signature: "— Ifan Arja",
+
+      surat:
+`Selamat ulang tahun.
+
+Aku bersyukur bisa menyaksikan perjalananmu sampai di titik ini.
+Cara kamu berpikir, bertanggung jawab, dan menghadapi banyak hal membuatku semakin menghargaimu setiap hari.
+
+Di usia yang baru ini, semoga kamu diberi kesehatan yang baik, pikiran yang jernih, dan langkah yang semakin mantap.
+Semoga setiap rencana yang kamu susun menemukan jalannya, dan setiap usaha yang kamu lakukan membawa hasil yang setimpal.
+
+Terima kasih sudah menjadi pribadi yang bisa diandalkan, yang tetap belajar, dan yang terus berkembang.
+Aku bangga berjalan bersamamu, melihat prosesmu, dan tumbuh di sampingmu.
+
+Apa pun yang akan datang ke depan, semoga kita bisa menghadapinya dengan lebih matang dan lebih kuat.
+Aku selalu mendukungmu, bukan hanya hari ini, tapi seterusnya.`,
+
+       Foto utama 
+      heroPhoto: "foto24.jpeg",
+
+       musikSrc : "birthday.mp3",
+
+      // Slider
+      slider: [
+        { src: "foto27.jpeg", caption: "Momen yang selalu aku simpan." },
+        { src: "foto28.jpeg", caption: "Hari yang sederhana tapi berharga." },
+        { src: "foto8.jpeg", caption: "Satu bingkai, banyak cerita." }
+      ],
+
+      // Gallery 
+      gallery: [
+        { src: "foto13.jpeg", cap: "Senyum kamu favoritku." },
+        { src: "foto14.jpeg", cap: "Box To Box 01/01/2006." },
+        { src: "foto15.jpeg", cap: "ipan ganteng yak yang ini hehe." },
+        { src: "poto-studio.jpeg", cap: "lagi dan lagi photo box hehe." },
+        { src: "foto18.jpeg", cap: "Reta with bodyguard nya." },
+        { src: "foto19.jpeg", cap: "ehh di ajak photo ama orang cantik guys !!." },
+        { src: "foto3.jpeg", cap: "farmachy girl btw mo dong di suntik." },
+        { src: "foto4.jpeg", cap: "CANTIK BEGETE KAN GUYSS HEHE." },
+        { src: "foto6.jpeg", cap: "habis toefl guyss, dan alhamdulillah skor nya ipan naik yang awal cuman dapet 100 after belajar with reta 335 mendingan hehe." },
+        { src: "foto9.jpeg", cap: "cakefff bener yak retaaa." },
+        { src: "foto10.jpeg", cap: "cuu amayy rett heehe." },
+        { src: "foto12.jpeg", cap: "lagi dan lagi photo box hehe, versi bus nya ini guys." }
+
+
+      ],
+
+      // Timeline
+      timeline: [
+        { date: "Sekarang",  title: "Fokus dan konsisten", text: "Terus bangun apa yang sedang kamu perjuangkan." },
+        { date: "Tahun ini", title: "Kesempatan baru",   text: "Semoga banyak pintu terbuka untukmu." },
+        { date: "Ke depan",  title: "Stabil dan tenang",  text: "Semoga hidupmu semakin terarah dan damai." },
+        { date: "Selamanya", title: "Bertumbuh bersama",  text: "Semoga kita terus belajar dan berkembang bersama." }
+      ]
+    };
+
+    /* ==========================
+       IMPLEMENTASI (JANGAN DIUBAH)
+       ========================== */
+
+    // Floating hearts
+    const HEARTS = 18;
+    for(let i=0;i<HEARTS;i++){
+      const h=document.createElement('div');
+      h.className='heart';
+      h.style.setProperty('--x', `${Math.random()*100}vw`);
+      h.style.setProperty('--d', `${8 + Math.random()*10}s`);
+      h.style.animationDelay = `${Math.random()*6}s`;
+      h.style.opacity = `${0.35 + Math.random()*0.5}`;
+      const s = 12 + Math.random()*14;
+      h.style.width = h.style.height = `${s}px`;
+      document.body.appendChild(h);
+    }
+
+    // Elements
+    const content = document.getElementById('content');
+    const gateWrap = document.getElementById('gateWrap');
+    const gateHint = document.getElementById('gateHint');
+    const gateInput = document.getElementById('gateInput');
+    const gateBtn = document.getElementById('gateBtn');
+    const gateErr = document.getElementById('gateErr');
+
+    // Password gate logic
+    function unlock(){
+      gateWrap.classList.remove('show');
+      gateWrap.setAttribute('aria-hidden','true');
+      content.style.display = 'grid';
+    }
+    function lock(){
+      gateHint.textContent = `Hint: ${PASSWORD_HINT}`;
+      gateWrap.classList.add('show');
+      gateWrap.setAttribute('aria-hidden','false');
+      content.style.display = 'none';
+    }
+
+    if(ENABLE_PASSWORD){
+      lock();
+      const tryOpen = () => {
+        if(gateInput.value === PAGE_PASSWORD){
+          gateErr.style.display='none';
+          unlock();
+        } else {
+          gateErr.style.display='block';
+        }
+      };
+      gateBtn.addEventListener('click', tryOpen);
+      gateInput.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') tryOpen(); });
+    } else {
+      unlock();
+    }
+
+    // Apply text data
+    document.getElementById('nama').textContent = DATA.nama;
+    document.getElementById('toName').textContent = DATA.nama;
+    document.getElementById('dateBadge').textContent = `🎉 ${DATA.tanggal}`;
+    document.getElementById('teaser').textContent = DATA.teaser;
+    document.getElementById('fav').textContent = DATA.fav;
+    document.getElementById('wish').textContent = DATA.wish;
+    document.getElementById('footerText').textContent = DATA.footerText;
+    document.getElementById('signature').textContent = DATA.signature;
+    document.getElementById('letterText').textContent = DATA.surat;
+
+    // Hero photo
+    const hero = document.getElementById('heroPhoto');
+    const heroHint = document.getElementById('heroHint');
+    if(DATA.heroPhoto){
+      hero.style.background = `url('${DATA.heroPhoto}') center/cover no-repeat`;
+      heroHint.style.display = 'none';
+    }
+
+    // Letter modal
+    const overlay = document.getElementById('overlay');
+    document.getElementById('openLetter').addEventListener('click', () => {
+      overlay.classList.add('show');
+      overlay.setAttribute('aria-hidden', 'false');
+    });
+    function closeLetter(){
+      overlay.classList.remove('show');
+      overlay.setAttribute('aria-hidden', 'true');
+    }
+    document.getElementById('closeLetter').addEventListener('click', closeLetter);
+    overlay.addEventListener('click', (e) => { if(e.target === overlay) closeLetter(); });
+
+    // Music
+    const audio = document.getElementById('audio');
+    if (DATA.musikSrc) audio.src = DATA.musikSrc;
+
+    let playing = false;
+    document.getElementById('playSong').addEventListener('click', async () => {
+      try{
+        if(!audio.src){
+          alert("Belum ada musik. Isi DATA.musikSrc (misal: 'lagu.mp3').");
+          return;
+        }
+        if(!playing){
+          await audio.play();
+          playing = true;
+          document.getElementById('playSong').textContent = "Pause musik";
+        } else {
+          audio.pause();
+          playing = false;
+          document.getElementById('playSong').textContent = "Putar musik";
+        }
+      }catch(err){
+        alert("Gagal memutar musik. Pastikan file mp3 ada di folder yang sama & namanya benar.");
+      }
+    });
+
+    // WhatsApp share
+    const waText = `Selamat ulang tahun SAYANGGKU 🤍, ${DATA.nama}\n\n${DATA.surat}\n\n${DATA.signature}`;
+    document.getElementById('waBtn').href = "https://wa.me/?text=" + encodeURIComponent(waText);
+
+    // Slider build
+    const slidesEl = document.getElementById('slides');
+    const dotsEl = document.getElementById('dots');
+    const captionEl = document.getElementById('slideCaption');
+    let idx = 0;
+    let sliderTimer = null;
+
+    function renderSlider(){
+      slidesEl.innerHTML = "";
+      dotsEl.innerHTML = "";
+      if(!DATA.slider || !DATA.slider.length){
+        captionEl.textContent = "—";
+        return;
+      }
+      DATA.slider.forEach((s, i) => {
+        const div = document.createElement('div');
+        div.className = 'slide';
+        div.style.backgroundImage = `url('${s.src}')`;
+        slidesEl.appendChild(div);
+
+        const dot = document.createElement('div');
+        dot.className = 'dot' + (i===0 ? ' active' : '');
+        dot.addEventListener('click', () => goTo(i, true));
+        dotsEl.appendChild(dot);
+      });
+      captionEl.textContent = DATA.slider[0]?.caption || "—";
+    }
+
+    function goTo(newIndex, userAction=false){
+      idx = (newIndex + DATA.slider.length) % DATA.slider.length;
+      slidesEl.style.transform = `translateX(${-idx*100}%)`;
+      [...dotsEl.children].forEach((d, i) => d.classList.toggle('active', i===idx));
+      captionEl.textContent = DATA.slider[idx]?.caption || "—";
+      if(userAction) restartAuto();
+    }
+
+    function restartAuto(){
+      if(sliderTimer) clearInterval(sliderTimer);
+      if(DATA.slider.length > 1) sliderTimer = setInterval(() => goTo(idx+1), 4000);
+    }
+
+    renderSlider();
+    restartAuto();
+
+    // Gallery build + Lightbox
+    const galleryEl = document.getElementById('gallery');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxCap = document.getElementById('lightboxCap');
+    const lightboxClose = document.getElementById('lightboxClose');
+
+    function openLightbox(src, cap){
+      lightboxImg.src = src;
+      lightboxCap.textContent = cap || "—";
+      lightbox.classList.add('show');
+      lightbox.setAttribute('aria-hidden','false');
+    }
+    function closeLightbox(){
+      lightbox.classList.remove('show');
+      lightbox.setAttribute('aria-hidden','true');
+      lightboxImg.src = "";
+    }
+
+    galleryEl.innerHTML = "";
+    (DATA.gallery || []).forEach(item => {
+      const fig = document.createElement('figure');
+      fig.innerHTML = `
+        <img src="${item.src}" alt="Moment">
+        <figcaption>${item.cap || ""}</figcaption>
+      `;
+      fig.addEventListener('click', () => openLightbox(item.src, item.cap));
+      galleryEl.appendChild(fig);
+    });
+
+    lightboxClose.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', (e)=>{ if(e.target === lightbox) closeLightbox(); });
+    window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeLightbox(); });
+
+    // Timeline build
+    const timelineEl = document.getElementById('timeline');
+    timelineEl.innerHTML = "";
+    (DATA.timeline || []).forEach(t => {
+      const div = document.createElement('div');
+      div.className = 'tItem';
+      div.innerHTML = `
+        <div class="tDate">${t.date}</div>
+        <div class="tTitle">${t.title}</div>
+        <div class="tText">${t.text}</div>
+      `;
+      timelineEl.appendChild(div);
+    });
+  </script>
+</body>
+</html>
